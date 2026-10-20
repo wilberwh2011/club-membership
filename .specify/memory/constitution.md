@@ -1,3 +1,4 @@
+
 # Calligraphy Art Club Membership Management System Constitution
 
 ## Core Principles
@@ -136,7 +137,9 @@ built it.
 - These workflows MUST work at a viewport width of 360 CSS pixels without horizontal scrolling,
   with touch targets large enough for reliable tapping and text readable without zooming.
 - Event check-in SHOULD let a volunteer find a person and record attendance in a small number
-  of taps, and SHOULD tolerate slow or intermittent connectivity at venues.
+  of taps.
+- Offline operation is out of scope unless a feature spec explicitly requires it. Screens SHOULD
+  remain responsive on slow connections (e.g., venue Wi-Fi or mobile data).
 - Other workflows (e.g., administration, reporting) SHOULD be usable on a phone and MUST be
   usable on a desktop browser.
 
@@ -148,8 +151,9 @@ person. The tool must be in the hand of the person doing the work.
 
 ## Data & Security Constraints
 
-- Technology choices (languages, frameworks, databases, hosting) are decided in each feature's
-  plan, not in this constitution, and MUST satisfy every principle above.
+- The technology stack (languages, frameworks, databases, hosting) is decided once, in the
+  first feature's plan, and MUST satisfy every principle above. All later features MUST reuse
+  that stack; changing it requires an amendment to this constitution.
 - All traffic to the deployed system MUST be encrypted in transit. Production data and backups
   MUST be protected by access control, and backups MUST NOT be stored in the repository.
 - Secrets (credentials, API keys, connection strings) MUST NOT be committed; they MUST be
@@ -193,4 +197,4 @@ person. The tool must be in the hand of the person doing the work.
 - The constitution SHOULD be reviewed at least once per membership year, or whenever the Club
   changes its privacy, payment, or language requirements.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-20 | **Last Amended**: 2026-10-20
+**Version**: 1.1.0 | **Ratified**: 2026-10-20 | **Last Amended**: 2026-10-20
