@@ -36,3 +36,5 @@ Once the system is live, the Club should be able to look up, at any time:
 - The Club's fiscal year runs from October 1 to September 30 of the following year.
 - If a member didn't pay the membership fee for the last fiscal year, they are considered inactive. If a member paid for last fiscal year or already for the current fiscal year, they are considered as active member. We are expecting the active member to pay the membership fee on AGM or during the events in the current fiscal year.
 - A membership can be a family or an individual. The membership fee for a family is currently $40 and an individual membership is $20.
+- A family membership is recorded as a single member record holding the primary contact's information, regardless of how many people are in the family. The membership type (individual or family) is used only to determine the fee amount.
+- Birthday is optional and collected as month and day only (no birth year); members provide it voluntarily.

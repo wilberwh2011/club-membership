@@ -9,8 +9,10 @@ Canonical terms for the Calligraphy Art Club Membership Management System. Use t
 | Active member | 有效会员 | A member who has paid the membership fee for the previous fiscal year or the current fiscal year (per brief; edge cases to confirm in clarify) |
 | Inactive member | 非有效会员 | A member who has not paid for the previous fiscal year (and not yet for the current one) |
 | Fiscal year | 财年 / 会计年度 | October 1 to September 30 of the following year; also the membership year |
-| Individual membership | 个人会员 | A membership covering one person (currently $20) |
-| Family membership | 家庭会员 | A membership covering a family (currently $40) |
+| Individual membership | 个人会员 | One member record covering one person (currently $20) |
+| Family membership | 家庭会员 | One member record (the primary contact) covering a family, however many people; type affects only the fee (currently $40) |
+| Membership type | 会员类型 | Individual or family; determines the fee amount only |
+| Birthday | 生日 | Optional; month and day only, no year; provided voluntarily |
 | Membership dues / fee | 会费 | The fee a member pays for a membership year |
 | Payment | 缴费记录 | A record of a dues or event payment: amount, method, date, reference |
 | Payment method | 缴费方式 | Cash (现金), e-Transfer (电子转账), credit card (信用卡), other |
