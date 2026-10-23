@@ -36,6 +36,9 @@ This feature creates the single trusted member register and its registration for
 - Q: Should the registration record the event at which the member registered? → A: Yes. A registration event field on the registration form records the Club event; it defaults to "N/A" when the registration is not taken during an event.
 - Q: What does the change history keep for a deleted record? → A: A deletion entry with the member number, member name, who deleted it, when, and the reason, but none of the person's other details.
 - Q: What can a person who is not signed in see? → A: Only the self-registration screen (plus the sign-in page Club users need); no other functions.
+- Q: Does a self-registrant see their member number? → A: Yes (owner decision). After a successful self-registration the confirmation shows the newly assigned member number and nothing else from the record; an accidental identical resubmission shows the same confirmation and number. The already-registered message is unchanged: no member number or other details of the existing record (FR-009).
+- Q: How do Club users sign in? → A: With a Google account (any email address may be used to create one). Self-registrants need no account. The system stores no passwords and issues no sign-in credentials of its own (FR-029).
+- Q: What is the Club's time zone? → A: America/Halifax (used for registration and privacy acknowledgment dates and change-history times).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -49,7 +52,7 @@ A prospective member opens the Club's registration form (from the Club website, 
 
 **Acceptance Scenarios**:
 
-1. **Given** a visitor opens the registration form, **When** they complete all required fields, acknowledge the privacy statement, and submit, **Then** a member record is created immediately with a new member number, today's registration date, and the submitted details, and the visitor sees a confirmation in their chosen language.
+1. **Given** a visitor opens the registration form, **When** they complete all required fields, acknowledge the privacy statement, and submit, **Then** a member record is created immediately with a new member number, today's registration date, and the submitted details, and the visitor sees a confirmation in their chosen language that shows their new member number.
 2. **Given** a visitor is registering a family, **When** they choose "family membership" and enter the primary contact's details, **Then** exactly one member record is created holding only the primary contact's information, and the form does not ask for details of other family members.
 3. **Given** a visitor leaves the birthday and WeChat ID empty, **When** they submit, **Then** the registration succeeds.
 4. **Given** a visitor is registering at a Club event, **When** they enter the event's name in the registration event field, **Then** the member record shows that event; **Given** the registration is not taken at an event, **When** the visitor leaves the field unchanged, **Then** the record shows "N/A".
@@ -191,7 +194,7 @@ Every user — Admin, EC member, treasurer, and self-registrant — can use ever
 
 - **FR-007**: The system MUST provide one registration form. Anyone, without signing in, MUST be able to use it to self-register. The form MUST show a short privacy statement (in the selected language) explaining what the Club collects and why, and MUST require acknowledgment before submitting; the acknowledgment date MUST be recorded. The form MUST NOT include the Note.
 - **FR-008**: A registration MUST become a member record immediately on submission, with no approval step, and MUST appear in searches and member counts straight away. Unwanted registrations are handled by Admin deletion (FR-016).
-- **FR-009**: After submitting, a self-registrant MUST see only a confirmation that the registration was received, except in the already-registered case of FR-012, where they see only that the email or phone is already registered and how to contact an EC member. The self-registration flow MUST NOT otherwise reveal whether the person or their contact details already exist in the register, MUST NOT show any details of an existing record, and MUST NOT give access to any member information, including their own record after submission.
+- **FR-009**: After a successful self-registration, the registrant MUST see a confirmation that includes their newly assigned member number and nothing else from the record. An accidental identical resubmission collapsed into the same record (FR-010) MUST show the same confirmation with the same member number. In the already-registered case of FR-012, the registrant MUST see only that the email or phone is already registered and how to contact an EC member, with no member number or other details of the existing record. The self-registration flow MUST NOT otherwise reveal whether the person or their contact details already exist in the register, MUST NOT show any details of an existing record, and MUST NOT give access to any member information, including their own record after submission (beyond the member number on the confirmation).
 - **FR-010**: The public registration form MUST resist bulk automated submissions and MUST collapse an accidental identical resubmission within a short interval into a single record.
 - **FR-011**: EC members and Admins MUST be able to register a new member on someone's behalf using the same registration form, with the same fields, privacy statement, and rules as self-registration. The change history MUST record whether a record was self-registered or, if not, which Club user created it.
 - **FR-012**: Each email (ignoring capitalization) and each phone number (ignoring spaces, dashes, brackets, and a leading country code) MUST belong to at most one member record. A registration whose email or phone already belongs to an existing record is a duplicate registration attempt and MUST be refused, and so MUST an edit that would give a record an email or phone that belongs to another record. EC members and Admins MUST be told which of the two matched and be offered the existing record; self-registrants MUST be told as described in FR-009. Deleted records do not count. A matching name alone MUST NOT block or flag a registration; no other duplicate detection is part of this feature.
@@ -239,6 +242,10 @@ Every user — Admin, EC member, treasurer, and self-registrant — can use ever
 
 - **FR-028**: The registration form and member search/look-up MUST be fully usable on a phone at 360 CSS pixels wide without horizontal scrolling, with touch targets easy to tap and text readable without zooming. All other screens of this feature MUST be usable on a desktop browser and SHOULD be usable on a phone.
 
+**Sign-in**
+
+- **FR-029**: Club users (Admins, EC members, treasurers) MUST sign in with a Google account (any email address may be used to create one). Self-registrants need no account. The system MUST NOT store passwords or issue its own sign-in credentials.
+
 ### Key Entities
 
 - **Member (会员)**: A person registered with the Club, or for a family membership, the family's primary contact. Holds the member number, names (English, Chinese), membership type, contact details (email, phone, WeChat ID), optional birthday (month and day), registration event ("N/A" if not registered at a Club event), registration date, privacy acknowledgment date, and an optional Note. Later features attach payments, membership dues, and event attendance to this record.
@@ -262,8 +269,8 @@ Every user — Admin, EC member, treasurer, and self-registrant — can use ever
 
 - **Single registration channel**: Paper registration is no longer used as a first step. Existing paper records are put into the Google Form / Google Sheet or the Microsoft Excel sheet, and those sources are transferred into the register by a later consolidation feature. Once consolidation is complete, this feature's registration form is the only channel for registering a new member.
 - **Google Form until consolidation**: The Google Form keeps running alongside the new registration form until the later consolidation feature exists. That feature will transfer existing and new Google Sheet and Microsoft Excel rows, will detect and resolve duplicates among them, and must decide how to handle rows whose email or phone already belongs to a member record (FR-012). Automatically feeding Google Form submissions into the register is a goal for that later feature, not built here.
-- Self-registrants do not get an account: submitting the form gives them no sign-in and no access to member information, including their own record. Members viewing or updating their own details is out of scope for this feature.
-- Club users (Admins, EC members, treasurers) sign in with individual accounts using the sign-in approach chosen in planning; shared logins are not used. The first Admin account is set up during deployment; after that, Admins assign Club roles.
+- Self-registrants do not get an account: submitting the form gives them no sign-in and no access to member information, including their own record (the confirmation shows only their new member number, FR-009). Members viewing or updating their own details is out of scope for this feature.
+- Club users (Admins, EC members, treasurers) sign in with individual Google accounts as required by FR-029; shared logins are not used. The first Admin account is set up during deployment; after that, Admins assign Club roles.
 - EC members, not a separate volunteer role, do member look-ups at events. Showing whether someone is an active member is a later feature.
 - In the later payments feature, the treasurer and Admins check and mark payments; EC members do not. This feature only fixes the role names so that feature can rely on them.
 - Member numbers are assigned in sequence as members register; their exact format is decided in planning.
