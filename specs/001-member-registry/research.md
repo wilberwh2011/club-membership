@@ -177,6 +177,45 @@ If steps 2–4 fail, repeat with fallback (a1) GIS popup. Then:
   the time to sign in at an event.
 Record the outcome in this file (append "Spike result") before task work continues.
 
+### Spike result (2026-10-26)
+
+**Verdict: (a2) confirmed** for Club-user sign-in, with one operating limitation (F1). Owner decision 2026-10-26: accept.
+
+Environment: development Apps Script project and Google Cloud project `club-registry-spike` (no billing) owned by a developer account; synthetic data only (3,000 rows, `example.org`, `902-555-01xx`); OAuth consent screen with `openid` and `email` scopes; throw-away code on branch `spike/001-signin` (never merged).
+
+| # | Test | Result |
+|---|---|---|
+| 1 | Chrome desktop, several Google accounts signed in | Default (owner) account: pass. Non-default account (`authuser=2`): **fail**, see F1 |
+| 2 | Safari iOS | Single account (Private tab), non-owner: pass. Second account in normal Safari (`authuser=1`): **fail** (F1) |
+| 3 | Chrome Android | Not tested |
+| 4 | Firefox | Not tested |
+| 5 | Private / incognito window, single account | Pass (desktop Chrome and iOS Safari, non-owner account) |
+| 6 | Two accounts in one browser | **Fail** in the cases described in F1 |
+| 7 | `sessionStorage` survives a refresh inside the HtmlService frame | Pass (desktop Chrome and iOS Safari); refresh shows F3 |
+| 7b | WeChat in-app browser (iOS, MicroMessenger 8.0.75) | Page loads signed out; in-app browser detected; bilingual "open in Chrome/Safari" warning shown before sign-in. Pass |
+| 8 | `code` and `state` reach `doGet` intact | Pass (`authuser`, `code`, `iss`, `prompt`, `scope`, `state` received) |
+| 9 | Search, 3,000 rows (one `getValues()` + in-memory filter) | Round trip 1,746 / 2,135 / 1,288 ms; server ~0.58 s, almost all Sheet read; filter ~5 ms. Pass (≤ 4 s warm, ≤ 8 s cold) |
+| 10a | Registration (locked append) | Round trip 1,722 ms; server 575 ms; lock wait 123 ms; member number 3001 followed the seeded rows. Pass (≤ 5 s) |
+| 10b | Two concurrent registrations | Both succeeded; member numbers 3002 / 3003 (sequential, no gap); lock waits 147 / 563 ms (serialized); round trips 1,787 / 3,204 ms. Pass |
+| 11 | A different editor updates the deployment | Not tested; **must be done before the production release procedure (R7) is final** |
+
+Exit criteria: sign-in works on the main browsers **when one Google account is used per browser or profile**; parameters arrive intact; search and registration times are within targets.
+
+**Findings**
+
+- **F1 — Multiple Google accounts in one browser.** `script.google.com` account routing (`/macros/u/N/`, `/accounts?authuser=N`) intercepts requests before app code runs ("Sorry, unable to open the file at this time"; Executions show no `doGet`). Observed: (a) signing in with a non-default account fails on the return from Google (Google appends `authuser=N`); (b) when the script owner's account is signed in but is not the default, even the first page load fails. Single-account and signed-out browsers work. Not tested: two non-owner accounts in one browser. Fallback (a1) runs on the same routing and is not expected to help.
+- **F2 — Used `code` and `state` stay in the address bar** after sign-in. Low risk (single use, short-lived, exchange needs the client secret). The app must never log or display the code; support guidance must say to redact `code=` values.
+- **F3 — Refresh right after sign-in** re-sends the used `state`; the single-use check correctly rejects it, but the user sees "Unknown or expired state" while the session itself is kept. The real build must not show an error in this case (for example, a "Continue" button that navigates to the clean `/exec` URL, or `doGet` ignoring a reused `state` when the browser already holds a valid session).
+- **F4 — WeChat.** The public page works inside WeChat, so self-registration links can be shared in Club WeChat groups; sign-in must happen in Chrome or Safari.
+
+**Decisions (owner, 2026-10-26)**
+
+1. Adopt (a2) as the sign-in design.
+2. Operating rule, in the Admin guide and as a bilingual hint on the sign-in page: use a browser or browser profile with only one Google account signed in, or a private window; keep the Club Gmail account in its own Chrome profile.
+3. Fix F3 in the real build.
+4. No switch to (a1). A static "bounce" redirect page that removes `authuser` is recorded as a possible future SPIKE-002 for F1(a), not planned.
+5. Android Chrome, Firefox and test 11 are recorded as not tested; test 11 is required before the production release procedure is final.
+
 ---
 
 ## R2. Public self-registration and signed-in screens: one deployment or two

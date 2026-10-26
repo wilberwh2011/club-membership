@@ -214,6 +214,12 @@ is bundled into HtmlService templates. Only `adapters/gas` and `server` may refe
   no stored passwords or own credentials); the Assumption now points to it.
 - ~~**Club time zone**.~~ **Resolved 2026-10-23**: `America/Halifax`.
 - **Chinese glossary wording** for new terms is draft; confirm before UI translation is final (FR-021).
+- **SPIKE-001 completed 2026-10-26: (a2) confirmed** (see research.md, "Spike result"). Carry into tasks:
+  - F1 operating rule: bilingual hint on the sign-in page and a section in the Admin guide (one Google account per
+    browser or profile, or a private window; Club Gmail account in its own Chrome profile).
+  - F3: refreshing right after sign-in must not show an error; the session is kept.
+  - F2: never log or display the OAuth `code`.
+  - Test 11 (another editor updates the deployment) must be run before the production release procedure (R7) is final.
 
 ## Complexity Tracking
 

@@ -1,0 +1,13 @@
+# Apps Script / clasp local config (holds script IDs; per developer)
+.clasp.json
+.clasp.*.json
+!.clasp.example.json
+
+# Node
+node_modules/
+dist/
+coverage/
+
+# Secrets and local env
+.env
+*.local.json
