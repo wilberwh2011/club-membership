@@ -351,7 +351,8 @@ Apps Script cannot see the visitor's IP address, so per-IP rate limiting is impo
    reload while keeping values).
 3. **Global rate limit** (circuit breaker): a CacheService counter of public submissions per 10-minute window;
    above 30 (configurable), the form returns `RATE_LIMITED` ("Please try again in a few minutes or ask an EC
-   member") and the Club account gets at most one alert email per hour (`MailApp`, well within quota).
+   member") and the Club account gets at most one alert email per hour (`MailApp`, well within quota), written in English
+   and Simplified Chinese from `email.rateLimit.*` translation keys (constitution Principle III).
    Registration by a signed-in EC member/Admin is not rate limited.
 4. **Identical-resubmission collapse**: the client generates a `submissionId` (UUID) when the form is
    rendered and reuses it on retries. Inside the lock, the server keeps `submission:<id>` → result in

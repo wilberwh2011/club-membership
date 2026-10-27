@@ -83,6 +83,8 @@ plus a private window that is not signed in.
 | 9 | Admin: try removing own Admin role while sole Admin | Refused (FR-015) |
 | 10 | Search at 2,000+ synthetic records on a phone | Result in < 10 s from first character (SC-001) |
 | 11 | Open the sign-in link inside WeChat | Message asks to open in a browser (research R1-2) |
+| 12 | A person who has not seen the form self-registers on a phone, once in English and once in 中文 (timed) | Each completed in < 3 min (SC-002) |
+| 13 | EC member registers a person on their behalf on a phone (timed) | Completed in < 3 min (SC-003) |
 
 ## 6. Production deploy (signed in as the Club account)
 

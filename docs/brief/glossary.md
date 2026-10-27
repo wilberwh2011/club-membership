@@ -21,6 +21,8 @@ Canonical terms for the Calligraphy Art Club Membership Management System. Use t
 | Treasurer | 会计 / 财务 | The Club officer who checks, marks, and confirms payments; can view but not change member records |
 | EC (Executive Committee) member | 理事 / 执委 | A Club role that can register members on someone's behalf, look up members, and update member records; does not check or mark payments |
 | Admin | 管理员 | A Club role that can do everything, including deleting member records and managing which Club users hold which Club role |
+| Club user | 俱乐部用户 | A person who signs in to use the registry and holds one or more Club roles; not the same as a member record, although one person may be both |
+| Club role | 俱乐部角色 | The permissions a Club user holds: Admin, EC member, or treasurer; a Club user may hold more than one |
 | AGM (Annual General Meeting) | 年会 / 会员大会 | The Club's yearly general meeting, where many members pay their fee |
 | Self-registration | 自助注册 | A new member registering themselves online |
 | Registration event | 注册活动名称 | The Club event at which a member registered; "N/A" (不适用) if the registration was not taken during an event |

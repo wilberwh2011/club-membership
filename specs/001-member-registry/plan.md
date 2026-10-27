@@ -76,7 +76,7 @@ bursts at events; about 6 screens; 13 server functions.
 |---|---|---|
 | I. Privacy First | Data stays in the Club account; spreadsheet not shared; dev uses a separate project and synthetic data; logs carry ids only (FR-027). Open question: how to identify users without sharing the sheet → R1. Drive version history retains deleted data → tension, see Complexity Tracking. | PASS (research needed: R1, R3, R7) |
 | II. Record, Don't Process, Payments | No payment fields or processors in this feature; no card/bank fields in the data model. | PASS |
-| III. Bilingual by Default | Translation resources by key; CI completeness check; glossary terms keyed; `Intl` date formatting; server returns codes, not text. | PASS |
+| III. Bilingual by Default | Translation resources by key; CI completeness check; glossary terms keyed; `Intl` date formatting; server returns codes, not text, except the Club-account rate-limit alert email, which the server builds from `email.*` keys in both languages (R5). | PASS |
 | IV. Auditable Money Trail | No money or status changes in this feature; FR-018 history follows the same rules. Deletion redaction must not rewrite history → R3. | PASS (research needed: R3) |
 | V. Test-First | Jest for pure domain/application; Playwright for layout; AC-tagged tests. Apps Script adapters cannot run in CI → see Complexity Tracking. | PASS with justified gap |
 | VI. Simplicity | One Apps Script project, one deployment, zero runtime dependencies, $0. Extra component: Google Cloud OAuth client → see Complexity Tracking. | PASS with justification |
@@ -202,6 +202,10 @@ is bundled into HtmlService templates. Only `adapters/gas` and `server` may refe
 2. Tooling skeleton: build, lint, Jest, i18n check, fixture check, CI, harness.
 3. Domain modules with tests first (validation, normalization, birthday, duplicates, permissions, search, history).
 4. Ports + memory adapters; use cases with AC-tagged tests (US1 → US2 → US6 → US3 → US4 → US5).
+
+> **Increments (owner decision 2026-10-27)**: tasks.md runs steps 2–7 twice. Increment 1 (MVP) covers US1, US2,
+> US6 and all of US5 (Club-user management and deletion) and is released to production; increment 2 adds US3 and US4.
+> See tasks.md "Organization" and "Implementation Strategy".
 5. Sheets/Lock/Cache/OIDC adapters + `setup` + `runAdapterChecks`.
 6. UI screens with Playwright 360px tests; translations.
 7. Dev deployment, manual checklist, production first-time setup with the Admin.

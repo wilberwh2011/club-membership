@@ -215,7 +215,7 @@ Every user — Admin, EC member, treasurer, and self-registrant — can use ever
 **Language**
 
 - **FR-020**: Every screen of this feature, including self-registration, MUST be available in English and Simplified Chinese, and users MUST be able to switch language at any time without losing entered data. A signed-in user's language choice MUST persist across sign-ins; the self-registration form MUST remember the visitor's choice for the visit.
-- **FR-021**: Domain terms MUST use the exact wording in `docs/brief/glossary.md`. Terms introduced by this feature that are not yet in the glossary (member number, Admin, Note, registration event, delete, duplicate registration attempt, change history) MUST be added to the glossary in both languages before they appear on screen.
+- **FR-021**: Domain terms MUST use the exact wording in `docs/brief/glossary.md`. Terms introduced by this feature that are not yet in the glossary (member number, Admin, Note, registration event, delete, duplicate registration attempt, change history, Club user, Club role) MUST be added to the glossary in both languages before they appear on screen.
 - **FR-022**: Dates (including birthday month and day) MUST be displayed in the format conventional for the selected language.
 
 **Access by Club role**
@@ -277,5 +277,6 @@ Every user — Admin, EC member, treasurer, and self-registrant — can use ever
 - There is no separate "no longer participating" status. A member who stops taking part keeps their record and becomes an inactive member, which the membership fees feature derives from dues per fiscal year. Deletion is only for records that should not be in the register at all.
 - The register is expected to hold a few thousand member records at most, used by a small number of Club users at a time.
 - Reasonable phone formats are North American; numbers from other countries are accepted with a country code.
+- **Where history of deleted records and Club roles is read**: change-history entries for an open member record are shown in the app (FR-025). Deletion entries and Club-role changes are kept in the change history and are read in the register's private spreadsheet by someone signed in as the Club account. No screen for them is part of this feature.
 - **Out of scope**: membership dues, payments and payment confirmation; determining active / inactive member status; events and check-in; reports and birthday lists; exports for mass email; transferring the existing Google Sheet, Microsoft Excel sheet, or paper records, and detecting or merging duplicates among them; automatically feeding Google Form submissions into the register; any payment processing; recording individual family members; members managing their own records.
-- **Dependencies**: The new terms listed in FR-021 were added to the glossary (both languages) on 2026-10-23; their Chinese wording is a draft for the Club to confirm before UI work. The technology stack is chosen in this feature's plan, as the first feature, per the constitution.
+- **Dependencies**: The new terms listed in FR-021 were added to the glossary (both languages) on 2026-10-23; their Chinese wording is a draft for the Club to confirm before UI work. "Club user" and "Club role" were added on 2026-10-27 (draft Chinese wording). The technology stack is chosen in this feature's plan, as the first feature, per the constitution.
