@@ -52,17 +52,17 @@ Two ports are needed that plan.md does not name; both are thin and pure at the i
 
 **Purpose**: build, lint, Jest, i18n check, fixture check, harness and CI, so every later task lands on a green pipeline.
 
-- [ ] T001 Create `package.json` (Node 22 in `engines`, **no runtime dependencies**; dev dependencies typescript,
+- [X] T001 Create `package.json` (Node 22 in `engines`, **no runtime dependencies**; dev dependencies typescript,
   esbuild, @google/clasp, jest, ts-jest, @types/jest, @types/google-apps-script, eslint, typescript-eslint,
   @playwright/test, all pinned) with scripts `build`, `lint`, `typecheck`, `test`, `test:ui`, `check:i18n`,
   `check:fixtures`, `fixtures`, `harness`, `dev:create`, `deploy:dev`, `deploy:prod`; run `npm install` to create
   `package-lock.json`
-- [ ] T002 Create `tsconfig.json` (strict, target ES2020, `noEmit`, includes `src`, `tests`, `scripts`) and
+- [X] T002 Create `tsconfig.json` (strict, target ES2020, `noEmit`, includes `src`, `tests`, `scripts`) and
   `jest.config.ts` (ts-jest; roots `tests/unit`, `tests/application`, `tests/contract`; ignores `tests/ui`)
-- [ ] T003 Create the source and test folders from plan.md "Project Structure" with a `.gitkeep` each:
+- [X] T003 Create the source and test folders from plan.md "Project Structure" with a `.gitkeep` each:
   `src/{domain,application,ports,adapters/gas,adapters/memory,server,ui/pages,ui/client,ui/styles,i18n}`,
   `tests/{unit,application,contract,ui,fixtures}`, `scripts/`, `config/`
-- [ ] T004 [P] Create `eslint.config.mjs` with typescript-eslint and: `no-restricted-globals` for Apps Script globals
+- [X] T004 [P] Create `eslint.config.mjs` with typescript-eslint and: `no-restricted-globals` for Apps Script globals
   (`SpreadsheetApp`, `LockService`, `CacheService`, `PropertiesService`, `UrlFetchApp`, `HtmlService`, `Utilities`,
   `MailApp`, `Session`, `ScriptApp`, `Logger`) in `src/domain`, `src/application`, `src/ports`,
   `src/adapters/memory`, `src/ui`; `no-console` everywhere except `src/adapters/gas/logger.ts` (FR-027);

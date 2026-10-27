@@ -1,0 +1,38 @@
+{
+  "name": "member-registry",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Calligraphy Art Club member registry (Google Apps Script web app)",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "jest",
+    "test:ui": "playwright test",
+    "check:i18n": "node scripts/check-i18n.mjs",
+    "check:fixtures": "node scripts/check-fixtures.mjs",
+    "fixtures": "node tests/fixtures/generate.mjs",
+    "harness": "node scripts/harness.mjs",
+    "dev:create": "node -e \"console.error('dev:create is not wired yet (task T101)'); process.exit(1)\"",
+    "deploy:dev": "node -e \"console.error('deploy:dev is not wired yet (task T101)'); process.exit(1)\"",
+    "deploy:prod": "node -e \"console.error('deploy:prod is not wired yet (task T101)'); process.exit(1)\""
+  },
+  "devDependencies": {
+    "@google/clasp": "3.4.1",
+    "@playwright/test": "1.64.1",
+    "@types/google-apps-script": "2.0.13",
+    "@types/jest": "30.0.0",
+    "@types/node": "22.20.5",
+    "esbuild": "0.28.2",
+    "eslint": "10.13.0",
+    "jest": "30.5.2",
+    "ts-jest": "29.4.15",
+    "ts-node": "10.9.2",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1"
+  }
+}
