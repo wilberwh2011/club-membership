@@ -509,9 +509,9 @@ and Club-user management.
   `sessionStorage`, error codes → `error.*` keys) and `src/ui/client/router.ts` (hash routes `#search`,
   `#member/<n>`, `#users`, later `#register`; navigation built from `capabilities` and limited to screens present in
   the build); all user values rendered with `textContent` (R1-6)
-- [ ] T089 Confirm the draft Chinese wording of the new glossary terms (member number, Admin, Note, registration
+- [X] T089 Confirm the draft Chinese wording of the new glossary terms (member number, Admin, Note, registration
   event, delete, duplicate registration attempt, change history, Club user, Club role) with the Club and record the confirmed wording and
-  date in `docs/brief/glossary.md` (FR-021). **Blocks T100 (final MVP translations)**
+  date in `docs/brief/glossary.md` (FR-021). **Blocks T100 (final MVP translations)** — done 2026-10-28 (owner confirmed; 有效会员 → 活跃会员, 非有效会员 → 非活跃会员)
 - [ ] T090 [P] Create the mobile-first stylesheet `src/ui/styles/main.css` (single column at 360 px, inputs 16 px,
   body ≥ 14 px, every control ≥ 44×44 px, visible focus, no fixed widths) (FR-028)
 

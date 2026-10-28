@@ -7,8 +7,8 @@ Canonical terms for the Calligraphy Art Club Membership Management System. Use t
 | Club | 俱乐部 | The Calligraphy Art Club |
 | Member | 会员 | A person registered with the Club |
 | Member number | 会员编号 | The unique number the system assigns to each member record; never changed or reused |
-| Active member | 有效会员 | A member who has paid the membership fee for the previous fiscal year or the current fiscal year (per brief; edge cases to confirm in clarify) |
-| Inactive member | 非有效会员 | A member who has not paid for the previous fiscal year (and not yet for the current one) |
+| Active member | 活跃会员 | A member who has paid the membership fee for the previous fiscal year or the current fiscal year (per brief; edge cases to confirm in clarify) |
+| Inactive member | 非活跃会员 | A member who has not paid for the previous fiscal year (and not yet for the current one) |
 | Fiscal year | 财年 / 会计年度 | October 1 to September 30 of the following year; also the membership year |
 | Individual membership | 个人会员 | One member record covering one person (currently $20) |
 | Family membership | 家庭会员 | One member record (the primary contact) covering a family, however many people; type affects only the fee (currently $40) |
@@ -35,4 +35,4 @@ Canonical terms for the Calligraphy Art Club Membership Management System. Use t
 | Member price / non-member price | 会员价 / 非会员价 | Event pricing based on member status |
 | Registration form | 报名表 / 入会表 | The system's registration form, used both for self-registration and by EC members registering someone; the only registration channel once existing records are consolidated (the Google Form runs alongside it until then) |
 
-> Chinese terms are draft translations; the Club should confirm preferred wording for the UI.
+> Chinese wording confirmed by the Club owner on 2026-10-28 (Active member → 活跃会员, Inactive member → 非活跃会员; all other terms confirmed as listed).

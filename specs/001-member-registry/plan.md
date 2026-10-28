@@ -217,7 +217,9 @@ is bundled into HtmlService templates. Only `adapters/gas` and `server` may refe
 - ~~**Spec wording**: sign-in "approach chosen in planning".~~ **Resolved 2026-10-23**: FR-029 (Google account only,
   no stored passwords or own credentials); the Assumption now points to it.
 - ~~**Club time zone**.~~ **Resolved 2026-10-23**: `America/Halifax`.
-- **Chinese glossary wording** for new terms is draft; confirm before UI translation is final (FR-021).
+- ~~**Chinese glossary wording** for new terms is draft; confirm before UI translation is final (FR-021).~~
+  **Resolved 2026-10-28**: the Club owner confirmed all Chinese terms, changing Active member to 活跃会员 and
+  Inactive member to 非活跃会员 (`docs/brief/glossary.md`).
 - **SPIKE-001 completed 2026-10-26: (a2) confirmed** (see research.md, "Spike result"). Carry into tasks:
   - F1 operating rule: bilingual hint on the sign-in page and a section in the Admin guide (one Google account per
     browser or profile, or a private window; Club Gmail account in its own Chrome profile).
