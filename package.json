@@ -15,7 +15,7 @@
     "test:ui": "playwright test",
     "check:i18n": "node scripts/check-i18n.mjs",
     "check:fixtures": "node scripts/check-fixtures.mjs",
-    "fixtures": "node tests/fixtures/generate.mjs",
+    "fixtures": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=ExperimentalWarning tests/fixtures/generate.mjs",
     "harness": "node scripts/harness.mjs",
     "dev:create": "node -e \"console.error('dev:create is not wired yet (task T101)'); process.exit(1)\"",
     "deploy:dev": "node -e \"console.error('deploy:dev is not wired yet (task T101)'); process.exit(1)\"",

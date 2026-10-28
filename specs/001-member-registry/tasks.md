@@ -86,19 +86,19 @@ Two ports are needed that plan.md does not name; both are thin and pure at the i
   SC-004, Principle III): key-set mismatch, empty value, placeholder mismatch (`{n}`), a `t('…')` key used in
   `src/ui`, `src/application` or `src/server` but missing,
   and a `term.*` value that differs from `docs/brief/glossary.md` each make the check fail; matching inputs pass
-- [ ] T009 Implement `scripts/check-i18n.mjs` (exported `checkI18n()` plus CLI exit code) to make T008 pass, reading
+- [X] T009 Implement `scripts/check-i18n.mjs` (exported `checkI18n()` plus CLI exit code) to make T008 pass, reading
   `src/i18n/en.json`, `src/i18n/zh-Hans.json`, `src/ui/**`, `src/application/**`, `src/server/**` and the
   English/Chinese columns of `docs/brief/glossary.md`
-- [ ] T010 [P] Create `src/i18n/en.json` and `src/i18n/zh-Hans.json` holding only the `term.*` keys for every glossary
+- [X] T010 [P] Create `src/i18n/en.json` and `src/i18n/zh-Hans.json` holding only the `term.*` keys for every glossary
   term this feature uses (member, member number, Admin, EC member, treasurer, Club user, Club role, Note, registration
   event, individual membership, family membership, delete, duplicate registration attempt, change history), values
   copied from `docs/brief/glossary.md`, so `npm run check:i18n` exits 0
-- [ ] T011 [P] Write the synthetic fixture generator `tests/fixtures/synthetic.ts` (pure, deterministic seed): `n`
+- [X] T011 [P] Write the synthetic fixture generator `tests/fixtures/synthetic.ts` (pure, deterministic seed): `n`
   members (default 3,000) with names `Test Person 0001…`, Chinese names from a fixed list of test names, emails
   `test0001@example.org…`, phones `<area>-555-01xx` cycling a fixed list of NANP area codes so every `phone_key` is
   unique, about 30% without WeChat ID or birthday, 10% family; plus `tests/fixtures/generate.mjs` (`npm run fixtures`)
   writing `tests/fixtures/members.synthetic.json`
-- [ ] T012 [P] Write failing tests for the fixture scan in `tests/unit/check-fixtures.test.ts` (Principle I): an email
+- [X] T012 [P] Write failing tests for the fixture scan in `tests/unit/check-fixtures.test.ts` (Principle I): an email
   outside `example.org`/`example.com`, a phone whose line number is not `555-01xx`, and a non-test name pattern in
   `tests/` or `scripts/` fail the scan; output of `tests/fixtures/synthetic.ts` passes
 - [ ] T013 Implement `scripts/check-fixtures.mjs` (exported `checkFixtures()` plus CLI exit code) scanning `tests/`,
