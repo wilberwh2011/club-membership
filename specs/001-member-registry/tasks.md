@@ -101,16 +101,16 @@ Two ports are needed that plan.md does not name; both are thin and pure at the i
 - [X] T012 [P] Write failing tests for the fixture scan in `tests/unit/check-fixtures.test.ts` (Principle I): an email
   outside `example.org`/`example.com`, a phone whose line number is not `555-01xx`, and a non-test name pattern in
   `tests/` or `scripts/` fail the scan; output of `tests/fixtures/synthetic.ts` passes
-- [ ] T013 Implement `scripts/check-fixtures.mjs` (exported `checkFixtures()` plus CLI exit code) scanning `tests/`,
+- [X] T013 Implement `scripts/check-fixtures.mjs` (exported `checkFixtures()` plus CLI exit code) scanning `tests/`,
   `scripts/` and `src/server/setup.ts` to make T012 pass
-- [ ] T014 Write `scripts/harness.mjs` skeleton: HTTP server on port 5173 serving `dist/*.html` and injecting a stub
+- [X] T014 Write `scripts/harness.mjs` skeleton: HTTP server on port 5173 serving `dist/*.html` and injecting a stub
   `google.script.run` that forwards calls to `POST /rpc/<function>`; for now `/rpc` answers
   `{ok:false,error:{code:'INTERNAL'}}` (wired to memory adapters in T077)
-- [ ] T015 [P] Create `playwright.config.ts` (testDir `tests/ui`; projects `phone` 360×740 and `desktop` 1280×800,
+- [X] T015 [P] Create `playwright.config.ts` (testDir `tests/ui`; projects `phone` 360×740 and `desktop` 1280×800,
   Chromium; `webServer: npm run build && npm run harness`) and layout helpers in `tests/ui/helpers/layout.ts`:
   `expectNoHorizontalScroll` (`scrollWidth <= 360`), `expectTapTargets` (every interactive element ≥ 44×44 CSS px),
   `expectReadableText` (inputs ≥ 16 px, body text ≥ 14 px), `expectNoOverflow` (R8, FR-028)
-- [ ] T016 Create `.github/workflows/ci.yml` (pull requests and pushes to `main`; Node 22; `npm ci`; `lint`;
+- [X] T016 Create `.github/workflows/ci.yml` (pull requests and pushes to `main`; Node 22; `npm ci`; `lint`;
   `typecheck`; `test`; `check:i18n`; `check:fixtures`; `build`; `npx playwright install --with-deps chromium`;
   `test:ui`; upload the Playwright report on failure). No secrets, no deploy step (R7)
 
