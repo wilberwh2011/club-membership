@@ -1,0 +1,5 @@
+{
+  "scriptId": "<APPS_SCRIPT_PROJECT_ID>",
+  "rootDir": "dist",
+  "deploymentId": "<WEB_APP_DEPLOYMENT_ID>"
+}

@@ -67,22 +67,22 @@ Two ports are needed that plan.md does not name; both are thin and pure at the i
   `MailApp`, `Session`, `ScriptApp`, `Logger`) in `src/domain`, `src/application`, `src/ports`,
   `src/adapters/memory`, `src/ui`; `no-console` everywhere except `src/adapters/gas/logger.ts` (FR-027);
   `no-restricted-properties` banning `innerHTML`/`outerHTML`/`insertAdjacentHTML` in `src/ui/client` (R1-6)
-- [ ] T005 [P] Create `src/appsscript.json`: runtime V8, `timeZone: "America/Halifax"`, `oauthScopes` exactly
+- [X] T005 [P] Create `src/appsscript.json`: runtime V8, `timeZone: "America/Halifax"`, `oauthScopes` exactly
   spreadsheets, script.external_request, script.send_mail, userinfo.email; `webapp.executeAs: USER_DEPLOYING`,
   `webapp.access: ANYONE_ANONYMOUS`
-- [ ] T006 [P] Add `.clasp.json`, `.clasp.dev.json`, `.clasp.prod.json`, `dist/`, `test-results/`,
+- [X] T006 [P] Add `.clasp.json`, `.clasp.dev.json`, `.clasp.prod.json`, `dist/`, `test-results/`,
   `playwright-report/` to `.gitignore`; create `.clasp.example.json` (placeholders `scriptId`, `rootDir: "dist"`,
   `deploymentId`) and `config/script-properties.example.json` with placeholder values for `SPREADSHEET_ID`,
   `OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET`, `FORM_TOKEN_SECRET`, `WEB_APP_URL`, `BOOTSTRAP_ADMIN_EMAIL`,
   `MEMBER_NUMBER_START` (`1001`), `ENVIRONMENT` (`dev`), optional `PUBLIC_RATE_LIMIT_PER_10_MIN` (`30`, R5)
-- [ ] T007 Write `scripts/build.mjs`: esbuild bundles `src/server/main.ts` to `dist/Code.js` (ES2020, IIFE exposing a
+- [X] T007 Write `scripts/build.mjs`: esbuild bundles `src/server/main.ts` to `dist/Code.js` (ES2020, IIFE exposing a
   `__registry` object), then appends one top-level stub per entry of `src/server/endpoints.ts` plus `doGet`, `setup`,
   `seedSyntheticMembers`, `runAdapterChecks`; bundles `src/ui/client/*.ts` and inlines it, `src/ui/styles/*.css` and
   both `src/i18n/*.json` into `dist/register.html`, `dist/signin.html`, `dist/app.html`, and makes both
   `src/i18n/*.json` available to server code in `dist/Code.js` (for the bilingual alert email, T052); copies
   `src/appsscript.json`.
   Start with a stub `src/server/main.ts` and an empty registry so `npm run build` exits 0
-- [ ] T008 [P] Write failing tests for the translation check in `tests/unit/check-i18n.test.ts` (FR-020, FR-021,
+- [X] T008 [P] Write failing tests for the translation check in `tests/unit/check-i18n.test.ts` (FR-020, FR-021,
   SC-004, Principle III): key-set mismatch, empty value, placeholder mismatch (`{n}`), a `t('…')` key used in
   `src/ui`, `src/application` or `src/server` but missing,
   and a `term.*` value that differs from `docs/brief/glossary.md` each make the check fail; matching inputs pass

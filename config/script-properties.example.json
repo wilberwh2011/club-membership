@@ -1,0 +1,11 @@
+{
+  "SPREADSHEET_ID": "<SPREADSHEET_ID>",
+  "OAUTH_CLIENT_ID": "<OAUTH_CLIENT_ID>.apps.googleusercontent.com",
+  "OAUTH_CLIENT_SECRET": "<OAUTH_CLIENT_SECRET>",
+  "FORM_TOKEN_SECRET": "<RANDOM_64_HEX_CHARS>",
+  "WEB_APP_URL": "https://script.google.com/macros/s/<DEPLOYMENT_ID>/exec",
+  "BOOTSTRAP_ADMIN_EMAIL": "admin@example.org",
+  "MEMBER_NUMBER_START": "1001",
+  "ENVIRONMENT": "dev",
+  "PUBLIC_RATE_LIMIT_PER_10_MIN": "30"
+}
