@@ -16,3 +16,4 @@ Auto? = could a script, lint rule, reviewer agent, or CI gate have caught this? 
 | 2026-10-27 | — | [process] | Typed commit command inside git diff pager; created stray file | Use --no-pager; press q | maybe: git config core.pager |
 | 2026-10-22 | — | [process] | Edited brief on wrong branch (not merged with main) | Check branch before edits | yes: pre-edit hook showing branch |
 | 2026-10-29 | T017–T021 | [privacy] | Checked tests use only example.org / 555-01xx | OK | yes: check:fixtures already does this |
+| 2026-10-29 | T017–T025 | [test] | "Missing module" red proves nothing; added throwing stubs so each assertion fails individually | Changed 2a prompt | yes: CI check "no test passes against stubs" |

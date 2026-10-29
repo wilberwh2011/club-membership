@@ -124,25 +124,25 @@ Two ports are needed that plan.md does not name; both are thin and pure at the i
 
 ### Tests first (domain) ⚠️ write and see them fail before T026–T034
 
-- [ ] T017 [P] Write failing tests in `tests/unit/normalize.test.ts` (FR-012, FR-013; US2-AS2, US2-AS4, US2-AS5):
+- [X] T017 [P] Write failing tests in `tests/unit/normalize.test.ts` (FR-012, FR-013; US2-AS2, US2-AS4, US2-AS5):
   email key = trimmed lowercase; phone key: digits and a leading `+` kept, NANP "10 digits (area code and exchange
   start with 2–9), optional leading `1`/`+1` removed → key is the 10 digits", others "must start with `+` and have
   8–15 digits → key is `+` + digits"; `(604) 555-0123`, `604-555-0123`, `+1 604 555 0123` share one key; text key =
   NFKC, lowercase, whitespace collapsed
-- [ ] T018 [P] Write failing tests in `tests/unit/birthday.test.ts` (FR-005; US1-AS5): month 1–12; day valid for
+- [X] T018 [P] Write failing tests in `tests/unit/birthday.test.ts` (FR-005; US1-AS5): month 1–12; day valid for
   month using a fixed leap-year table; `{2,29}` accepted, `{2,30}`, `{4,31}`, `{13,1}`, `{0,5}` rejected
   (`birthday_invalid`); month and day empty together or both set ("empty iff `birthday_day` empty"); no year field
-- [ ] T019 [P] Write failing tests in `tests/unit/validation.test.ts` (FR-004, FR-006, FR-007; US1-AS3, US1-AS8,
+- [X] T019 [P] Write failing tests in `tests/unit/validation.test.ts` (FR-004, FR-006, FR-007; US1-AS3, US1-AS8,
   US3-AS1): all errors returned at once as `{field, code}`; `name_required` when both names empty; `required` for
   email, phone, membership type; `email_invalid` ("one `@`, non-empty local part, domain with a dot, no spaces, ≤ 254
   chars"); `phone_invalid`; `membership_type_invalid` (only `individual` | `family`); `privacy_ack_required`;
   `too_long` for `name_en` "text ≤ 100", `name_zh` "text ≤ 50", `email` "text ≤ 254", `phone` "text ≤ 30",
   `wechat_id` "text ≤ 50", `registration_event` "text ≤ 100", `note` "text ≤ 2,000"; `wechat_invalid` for internal
   spaces; registration event defaults to `N/A`; empty WeChat ID and birthday are valid; values are trimmed
-- [ ] T020 [P] Write failing tests in `tests/unit/duplicates.test.ts` (FR-012; US1-AS6, US1-AS7, US3-AS3, US4-AS4,
+- [X] T020 [P] Write failing tests in `tests/unit/duplicates.test.ts` (FR-012; US1-AS6, US1-AS7, US3-AS3, US4-AS4,
   SC-005): email match ignores case; phone match across formats; email is reported before phone; the record being
   edited is excluded; a matching name alone never matches
-- [ ] T021 [P] Write failing tests in `tests/unit/search.test.ts` (FR-013; US2-AS1…AS5, US2-AS7) for the query-shape
+- [X] T021 [P] Write failing tests in `tests/unit/search.test.ts` (FR-013; US2-AS1…AS5, US2-AS7) for the query-shape
   table in `contracts/members.md`: digits ≤ 6 → exact member number or phone digit substring (≥ 4 digits); `@` →
   email substring; phone punctuation → phone-key substring; otherwise name/email text match; `1024` finds 1024,
   `mei lin` finds "Mei Lin Example", `林` finds "林美", `555-0123` and `6045550123` find "(604) 555-0123"; exact
