@@ -45,6 +45,7 @@ This feature creates the single trusted member register and its registration for
 - Q: Which reasons can an Admin give for deleting a member record? → A: Exactly one of three (owner decision): test record (测试记录), spam (垃圾注册), entered by mistake (误录入). There is no "other" choice and no free text, because the change history is never purged and must not hold personal details (Principle I). Deletion is only for test, spam, or mistakenly entered records.
 - Q: What does the change history keep for a deleted record? → A: A deletion entry with the member number, who deleted it, when, and the chosen reason. It keeps no member name and no other personal detail (owner decision; replaces the 2026-10-23 answer). Values held in the record's earlier change-history entries are removed as before.
 - Q: In what order is a deletion carried out? → A: First the deletion entry is recorded, then the record's earlier change-history values are removed, then the record itself is removed. Each step is safe to repeat, so an interrupted deletion can be retried until it completes.
+- Q: How are Club role values read from the register? → A: Each comma-separated value is matched without regard to capitalization, after trimming surrounding spaces, to exactly one of admin, ec_member, treasurer (owner decision). Any other value (for example "superuser", "EC Member", "ec-member", or an empty value) grants nothing and does not cause an error. Role values written by the application are always the lowercase form.
 
 ## User Scenarios & Testing *(mandatory)*
 

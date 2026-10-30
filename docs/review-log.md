@@ -20,3 +20,5 @@ Auto? = could a script, lint rule, reviewer agent, or CI gate have caught this? 
 | 2026-10-29 | T017–T021 | [test] | null phone/email keys could falsely match (null === null) — no test | Added FR-012 null-key test | maybe: reviewer-agent checklist "null/empty inputs" |
 | 2026-10-29 | T017–T021 | [ci] | CI red by design (tests before implementation) | Expected until 2b | — |
 | 2026-10-30 | T022–T025 | [rule] | Deletion design: reason as fixed code in ChangeHistory; delete only for test/spam/mistake; no name kept; audit entry before purge | Spec FR-016/018, data model, tests updated | maybe: reviewer checks "audit write before destructive step" |
+| 2026-10-30 | T022 | [rule] | Roles typed by hand in ClubUsers: accept case variants and surrounding spaces; reject anything else | parseRoles + tests; spec/data-model updated | maybe: reviewer "untrusted input from Sheets" |
+| 2026-10-30 | T024 | [test] | To verify in use-case tests: invalid reason refused; retry adds no 2nd deletion entry; no-op edit adds no entry; FR-017 | Watch in Phase 3/6 | no |

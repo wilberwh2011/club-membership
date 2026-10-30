@@ -81,7 +81,7 @@ There is no status column; active / inactive is derived by the later membership-
 | `email` | text | yes | Lowercased Google account email used to sign in; unique among active users |
 | `google_sub` | text | after first sign-in | Google's stable account id; bound at the first sign-in; unique |
 | `display_name` | text ≤ 100 | yes | Shown in the app and in change history |
-| `roles` | text | yes (may be empty) | Comma-separated subset of `admin`, `ec_member`, `treasurer`; empty = no access |
+| `roles` | text | yes (may be empty) | Comma-separated subset of `admin`, `ec_member`, `treasurer`; empty = no access. Read with `parseRoles` (`src/domain/permissions.ts`): split on commas, trim each value, match case-insensitively to exactly one of the three; any other value (`superuser`, `EC Member`, `ec-member`, empty) grants nothing and never throws; duplicates collapse. Permission checks only receive `parseRoles` output. Written by the app always in canonical lowercase (owner decision 2026-10-30) |
 | `language` | enum | yes | `en` \| `zh-Hans`; default `en` |
 | `created_at` | timestamp | yes | System |
 | `updated_at` | timestamp | yes | System |

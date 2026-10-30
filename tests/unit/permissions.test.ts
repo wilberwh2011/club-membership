@@ -1,7 +1,8 @@
 // Permission matrix (src/domain/permissions.ts): FR-024, FR-025, SC-007; US2-AS6, US3-AS4, US4-AS6, US5-AS4, US6-AS4.
 // The expected matrix below is copied from data-model.md "Permission matrix"; a user's capabilities are the union
-// over their roles (FR-024) and no roles means no capabilities.
-import { capabilitiesFor, hasCapability } from '../../src/domain/permissions';
+// over their roles (FR-024) and no roles means no capabilities. parseRoles reads a ClubUsers `roles` cell
+// (owner decision 2026-10-30): trimmed, case-insensitive, exactly admin | ec_member | treasurer; anything else is ignored.
+import { capabilitiesFor, hasCapability, parseRoles } from '../../src/domain/permissions';
 import type { Capability, Role } from '../../specs/001-member-registry/contracts/api-types';
 
 const ROLES: Role[] = ['admin', 'ec_member', 'treasurer'];
@@ -81,5 +82,40 @@ describe('capabilitiesFor', () => {
     const capabilities = capabilitiesFor(['ec_member', 'ec_member']);
     expect(new Set(capabilities).size).toBe(capabilities.length);
     expect([...capabilities].sort()).toEqual(expectedFor(['ec_member']));
+  });
+});
+
+describe('parseRoles', () => {
+  it.each([
+    ['Admin', ['admin']],
+    ['ADMIN', ['admin']],
+    [' admin ', ['admin']],
+    ['EC_Member', ['ec_member']],
+    ['Treasurer', ['treasurer']],
+  ] as [string, Role[]][])('FR-024 %p is read case-insensitively after trimming as %p', (cell, roles) => {
+    expect(parseRoles(cell)).toEqual(roles);
+  });
+
+  it('FR-024 comma-separated roles are all read', () => {
+    expect(parseRoles('Admin, EC_Member')).toEqual(['admin', 'ec_member']);
+  });
+
+  it('FR-024 duplicates collapse', () => {
+    expect(parseRoles('admin,Admin')).toEqual(['admin']);
+  });
+
+  it.each(['superuser', 'EC Member', 'ec-member', 'root', ''])(
+    'FR-025 unknown role value %p grants nothing and does not throw',
+    (cell) => {
+      expect(parseRoles(cell)).toEqual([]);
+    },
+  );
+
+  it('FR-025 unknown values are ignored next to known ones', () => {
+    expect(parseRoles('Treasurer, superuser')).toEqual(['treasurer']);
+  });
+
+  it('FR-025 capabilities for "Treasurer, superuser" equal those of a treasurer', () => {
+    expect([...capabilitiesFor(parseRoles('Treasurer, superuser'))].sort()).toEqual(expectedFor(['treasurer']));
   });
 });
