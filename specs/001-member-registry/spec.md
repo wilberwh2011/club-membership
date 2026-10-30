@@ -34,11 +34,17 @@ This feature creates the single trusted member register and its registration for
 - Q: Is there a place for extra information on a member record? → A: Yes. A Note field that EC members and Admins can add to when updating a member record.
 - Q: Can treasurers see birthday, Note, and change history? → A: Yes. Treasurers can view every field of a member record and its change history, but cannot register, edit, or delete members.
 - Q: Should the registration record the event at which the member registered? → A: Yes. A registration event field on the registration form records the Club event; it defaults to "N/A" when the registration is not taken during an event.
-- Q: What does the change history keep for a deleted record? → A: A deletion entry with the member number, member name, who deleted it, when, and the reason, but none of the person's other details.
+- Q: What does the change history keep for a deleted record? → A: A deletion entry with the member number, member name, who deleted it, when, and the reason, but none of the person's other details. *(Superseded on 2026-10-30: the member name is no longer kept and the reason is one of three fixed choices; see Session 2026-10-30.)*
 - Q: What can a person who is not signed in see? → A: Only the self-registration screen (plus the sign-in page Club users need); no other functions.
 - Q: Does a self-registrant see their member number? → A: Yes (owner decision). After a successful self-registration the confirmation shows the newly assigned member number and nothing else from the record; an accidental identical resubmission shows the same confirmation and number. The already-registered message is unchanged: no member number or other details of the existing record (FR-009).
 - Q: How do Club users sign in? → A: With a Google account (any email address may be used to create one). Self-registrants need no account. The system stores no passwords and issues no sign-in credentials of its own (FR-029).
 - Q: What is the Club's time zone? → A: America/Halifax (used for registration and privacy acknowledgment dates and change-history times).
+
+### Session 2026-10-30
+
+- Q: Which reasons can an Admin give for deleting a member record? → A: Exactly one of three (owner decision): test record (测试记录), spam (垃圾注册), entered by mistake (误录入). There is no "other" choice and no free text, because the change history is never purged and must not hold personal details (Principle I). Deletion is only for test, spam, or mistakenly entered records.
+- Q: What does the change history keep for a deleted record? → A: A deletion entry with the member number, who deleted it, when, and the chosen reason. It keeps no member name and no other personal detail (owner decision; replaces the 2026-10-23 answer). Values held in the record's earlier change-history entries are removed as before.
+- Q: In what order is a deletion carried out? → A: First the deletion entry is recorded, then the record's earlier change-history values are removed, then the record itself is removed. Each step is safe to repeat, so an interrupted deletion can be retried until it completes.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -126,16 +132,16 @@ Members who stop taking part are not removed: they keep their record and become 
 
 ### User Story 5 - Admin: delete test and junk records and manage Club roles (Priority: P2)
 
-An Admin can do everything an EC member can. In addition, when a record should never have existed — a test entry, a prank or spam self-registration, or a record entered by mistake — the Admin deletes it at their discretion; and the Admin decides which Club users hold which Club role (Admin, EC member, treasurer).
+An Admin can do everything an EC member can. In addition, when a record should never have existed — a test entry, a prank or spam self-registration, or a record entered by mistake — the Admin deletes it, choosing which of these three reasons applies; and the Admin decides which Club users hold which Club role (Admin, EC member, treasurer).
 
 **Why this priority**: Because registrations become members immediately (FR-008), someone must be able to keep junk entries out of the register and member counts; and someone must control who can see members' personal details.
 
-**Independent Test**: As an Admin, delete a synthetic test record and confirm it no longer appears anywhere while a deletion entry with only the member number and name (no other personal details) remains in the change history; give a Club user the treasurer role and confirm their access changes accordingly; confirm EC members and treasurers can do neither.
+**Independent Test**: As an Admin, delete a synthetic test record and confirm it no longer appears anywhere while a deletion entry with only the member number, who, when, and the chosen reason (no name or other personal details) remains in the change history; give a Club user the treasurer role and confirm their access changes accordingly; confirm EC members and treasurers can do neither.
 
 **Acceptance Scenarios**:
 
-1. **Given** an Admin chooses to delete a member record, **When** they are asked to confirm and to give a reason (e.g., "test record", "spam"), **Then** the record is deleted only after they confirm and give a reason.
-2. **Given** a member record has been deleted, **When** any user searches for it or counts members, **Then** it does not appear and is not counted, and the change history keeps a deletion entry showing the member number, member name, who deleted it, when, and the reason, but none of the person's other details.
+1. **Given** an Admin chooses to delete a member record, **When** they are asked to confirm and to choose a reason (test record, spam, or entered by mistake), **Then** the record is deleted only after they confirm and choose one of these three reasons; no other reason and no free text can be given.
+2. **Given** a member record has been deleted, **When** any user searches for it or counts members, **Then** it does not appear and is not counted, and the change history keeps a deletion entry showing the member number, who deleted it, when, and the chosen reason, but no member name and none of the person's other details.
 3. **Given** an Admin assigns or removes a Club role for a Club user, **When** that user next uses the registry, **Then** they have exactly the permissions of their current roles, and the role change is in the change history.
 4. **Given** an EC member or treasurer is signed in, **When** they look for delete or role-management functions, **Then** neither is available.
 
@@ -171,7 +177,7 @@ Every user — Admin, EC member, treasurer, and self-registrant — can use ever
 - **Chinese characters in search and names**: search works for Simplified Chinese characters; partial Chinese name matches are found.
 - **Former member registers again**: if either the email or the phone is unchanged, the registration is refused as already registered and the existing record (with its history) remains the member's record; an EC member updates it if needed. If both have changed, a new record is created; finding such duplicates is left to the later consolidation feature.
 - **Deleted records**: a deleted record's email and phone no longer count, so the same person can register again; member numbers of deleted records are never reused.
-- **Deleting a real member by mistake**: deletion requires a confirmation and a reason and cannot be undone through the application; the deletion entry in the change history shows which member (number and name) was deleted and who did it.
+- **Deleting a real member by mistake**: deletion is offered only for test, spam, or mistakenly entered records, requires a confirmation and one of those three reasons, and cannot be undone through the application; the deletion entry in the change history shows which member number was deleted, who did it, when, and the reason, but not the member's name.
 - **Registration event not known or misspelled**: the registration event is free text, so a visitor may leave "N/A" or type the event name differently from others; EC members and Admins can correct it when updating the record. Linking it to a recorded event is left to the later events feature.
 - **Admin removes their own Admin role**: the system must not allow the last remaining Admin to lose the Admin role.
 - **Two users editing the same record at the same time**: the second save must not silently overwrite the first; the second user is told the record changed and can review before saving.
@@ -207,9 +213,9 @@ Every user — Admin, EC member, treasurer, and self-registrant — can use ever
 
 - **FR-014**: EC members and Admins MUST be able to view and edit all fields of a member record except the member number, including membership type and the Note. The Note is for additional information added when updating a member record; Admins, EC members, and treasurers can see it, and only Admins and EC members can change it.
 - **FR-015**: Only Admins MUST be able to assign and remove Club roles for Club users. The system MUST NOT allow the last remaining Admin to lose the Admin role.
-- **FR-016**: Admins MUST be able to permanently delete a member record at their discretion (intended for test, junk, spam, or mistaken records). Deletion MUST require an explicit confirmation and a reason. A deleted record MUST no longer appear in searches or member counts, and the person's personal details MUST be removed from the register, except the member number and member name kept in the deletion entry (FR-018).
+- **FR-016**: Admins MUST be able to permanently delete a member record at their discretion only for test records, spam registrations, or records entered by mistake. Deletion MUST require an explicit confirmation and exactly one of these three reasons (test record, spam, entered by mistake); no other reason and no free text are accepted. A deleted record MUST no longer appear in searches or member counts, and the person's personal details MUST be removed from the register; only the member number remains, in the deletion entry (FR-018).
 - **FR-017**: Only Admins MUST be able to delete member records. Once later features attach payments or event attendance to a member record, that record MUST NOT be deletable (payments are never hard-deleted under the constitution's Auditable Money Trail principle). The system MUST NOT offer any other way to remove member records.
-- **FR-018**: Every creation, edit, and deletion of a member record, and every Club role change, MUST produce a change-history entry recording who made the change, when (date and time with time zone), the record affected (by member number, or the Club user for role changes), and the old and new values. Change history MUST be append-only and MUST NOT be editable or deletable through the application. If the change-history entry cannot be saved, the change itself MUST NOT be saved. Exception for deletion: the deletion entry MUST record the member number, the member name (English and/or Chinese), who deleted it, when, and the reason, but none of the person's other details, and the personal values held in that record's earlier change-history entries MUST be removed, leaving who, when, and the kind of change.
+- **FR-018**: Every creation, edit, and deletion of a member record, and every Club role change, MUST produce a change-history entry recording who made the change, when (date and time with time zone), the record affected (by member number, or the Club user for role changes), and the old and new values. Change history MUST be append-only and MUST NOT be editable or deletable through the application. If the change-history entry cannot be saved, the change itself MUST NOT be saved. Exception for deletion: the deletion entry MUST record the member number, who deleted it, when, and the chosen reason (FR-016), but no member name and none of the person's other details, and the personal values held in that record's earlier change-history entries MUST be removed, leaving who, when, and the kind of change. The deletion entry MUST be recorded before those values and the record are removed, and each deletion step MUST be safe to retry.
 - **FR-019**: When two users edit the same record concurrently, the system MUST NOT silently overwrite one user's changes; the later user MUST be told the record changed and be able to review before saving.
 
 **Language**
@@ -249,7 +255,7 @@ Every user — Admin, EC member, treasurer, and self-registrant — can use ever
 ### Key Entities
 
 - **Member (会员)**: A person registered with the Club, or for a family membership, the family's primary contact. Holds the member number, names (English, Chinese), membership type, contact details (email, phone, WeChat ID), optional birthday (month and day), registration event ("N/A" if not registered at a Club event), registration date, privacy acknowledgment date, and an optional Note. Later features attach payments, membership dues, and event attendance to this record.
-- **Change-history entry**: An append-only record of one change — who, when, which member record or Club user, old values, new values, and the kind of change (create, edit, delete, role change). For a deleted member record, personal values are removed from its entries; the deletion entry keeps only the member number and member name.
+- **Change-history entry**: An append-only record of one change — who, when, which member record or Club user, old values, new values, and the kind of change (create, edit, delete, role change). For a deleted member record, personal values are removed from its entries; the deletion entry keeps only the member number, who, when, and the chosen reason.
 - **Club user**: A person who signs in to use the registry, holding one or more Club roles (Admin, EC member, treasurer) and a preferred language. A Club user is not the same thing as a member record, although one person may be both.
 
 ## Success Criteria *(mandatory)*
@@ -261,7 +267,7 @@ Every user — Admin, EC member, treasurer, and self-registrant — can use ever
 - **SC-003**: An EC member can register a person on their behalf in under 3 minutes.
 - **SC-004**: 100% of text on every screen of this feature is available in both English and Simplified Chinese, verified by an automated completeness check.
 - **SC-005**: In tests with synthetic records, 100% of attempts to register or edit a record with an email or phone that belongs to another record are refused, and 100% of registrations that share only a name with an existing member succeed.
-- **SC-006**: Every change to a member record or Club role, including every deletion, can be traced to who made it, when, and (for deletions) why, and 0 deleted records leave personal details other than the member number and name (in the deletion entry) behind in the register.
+- **SC-006**: Every change to a member record or Club role, including every deletion, can be traced to who made it, when, and (for deletions) why — one of the three deletion reasons — and 0 deleted records leave personal details other than the member number (in the deletion entry) behind in the register.
 - **SC-007**: In role-based access tests, 0 restricted fields or actions are available to a role that is not permitted them (FR-025), and a visitor who is not signed in can reach 0 screens other than self-registration and sign-in.
 - **SC-008**: After this feature is in use, the Club can answer "how many members are in the register?" from the system alone for every member registered through it.
 

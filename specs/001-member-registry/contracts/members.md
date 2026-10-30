@@ -54,17 +54,24 @@ keys → `VALIDATION_FAILED`).
 **AC**: US4 AS1–AS4, AS6; edge case "two users editing"; "connection drops" (retry with same `expectedVersion`
 returns `VERSION_CONFLICT` if the first save landed, letting the user review).
 
-## `deleteMember(sessionToken, memberNumber, expectedVersion, reason, confirmed) → Result<null>`
+## `deleteMember(sessionToken, memberNumber, expectedVersion, reasonCode, confirmed) → Result<null>`
 
 **Who**: `member.delete` (Admin only). EC member / treasurer → `FORBIDDEN` (US5 AS4).
-**Input**: `reason` 1…200 chars (`reason_required`), `confirmed = true` (`confirmation_required`).
-**Processing** (research R3), inside one lock:
+**Input**: `reasonCode` (`DeletionReasonCode`): one of `test_record` | `spam` | `entered_by_mistake`; missing or any
+other value → `reason_required`; no free text. `confirmed = true` (`confirmation_required`).
+**Processing** (research R3, revised 2026-10-30), inside one lock:
 
-1. Re-read row; `NOT_FOUND`; `VERSION_CONFLICT`.
+1. Re-read row. If the row is gone and a `member_deleted` entry for `memberNumber` exists, this is a retry of a
+   deletion that already removed the row: run step 4(b) (a no-op when nothing is left) and return success.
+   Otherwise `NOT_FOUND`; `VERSION_CONFLICT`.
 2. `MemberReferences.hasDependents(memberNumber)` → `HAS_DEPENDENT_RECORDS` (FR-017; always false in this feature).
-3. Snapshot row and the member's ChangeValues rows (in memory, for rollback only; never logged).
-4. Remove Members row; `purgeMemberValues(memberNumber)`; append ChangeHistory `member_deleted` and ChangeValues
-   `name_en`, `name_zh`, `reason`; flush. On failure restore snapshot → `SAVE_FAILED`.
+3. Build the steps with `deletionPlan` (`src/domain/history.ts`).
+4. (a) Append ChangeHistory `member_deleted` (`subject_id`, actor, `recorded_at`, `reason_code`; **no** ChangeValues
+   rows, no member name), skipped if one already exists for `memberNumber`; (b) `purgeMemberValues(memberNumber)`
+   (every ChangeValues row of that member); (c) remove the Members row. Each step is safe to retry; a failure →
+   `SAVE_FAILED`, and retrying the same call completes the deletion.
+
+The UI shows the three codes with the translation keys `reason.test_record`, `reason.spam`, `reason.entered_by_mistake`.
 
 The member number is not reused (counter untouched). The email and phone become free for a new registration.
 **Errors**: `VALIDATION_FAILED`, `NOT_FOUND`, `VERSION_CONFLICT`, `HAS_DEPENDENT_RECORDS`, `NOT_SIGNED_IN`,

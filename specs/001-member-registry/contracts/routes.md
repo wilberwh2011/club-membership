@@ -19,7 +19,7 @@ Screens inside the app shell (client-side routing, `#search`, `#member/<n>`, `#r
 | Member view (details + history) | `member.viewDetails` | Yes (FR-028) |
 | Register on behalf (same form component as public) | `member.register` | Yes (FR-028) |
 | Edit member / Note | `member.edit` | Should |
-| Delete member (confirm + reason) | `member.delete` | Should |
+| Delete member (confirm + one of three reason codes) | `member.delete` | Should |
 | Club users and roles | `clubUser.manage` | Should |
 
 Hiding a screen is a convenience; the server enforces every capability again (contracts README §2).

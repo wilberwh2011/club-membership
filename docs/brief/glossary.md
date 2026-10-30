@@ -29,10 +29,14 @@ Canonical terms for the Calligraphy Art Club Membership Management System. Use t
 | Duplicate registration attempt | 重复注册 | A registration that uses an email or phone already belonging to an existing member record; it is refused |
 | Note | 备注 | Additional information an EC member or Admin adds to a member record when updating it |
 | Change history | 变更记录 | The append-only record of who changed what on a member record (or Club role), when, and the old and new values |
-| Delete (member record) | 删除（会员记录） | Admin-only permanent removal of a test, junk, or mistaken member record; only a deletion entry with the member number and name remains in the change history |
+| Delete (member record) | 删除（会员记录） | Admin-only permanent removal of a member record that is a test record, spam, or entered by mistake (one of these three reasons must be chosen); only a deletion entry with the member number, who, when, and the reason remains in the change history — no name or other personal details |
+| Test record | 测试记录 | Deletion reason: the record was created for testing |
+| Spam | 垃圾注册 | Deletion reason: a prank or junk registration |
+| Entered by mistake | 误录入 | Deletion reason: the record should not have been entered (for example, entered twice or for the wrong person) |
 | Event | 活动 | A Club activity with on-site registration |
 | Check-in | 现场登记 | Recording attendance at an event |
 | Member price / non-member price | 会员价 / 非会员价 | Event pricing based on member status |
 | Registration form | 报名表 / 入会表 | The system's registration form, used both for self-registration and by EC members registering someone; the only registration channel once existing records are consolidated (the Google Form runs alongside it until then) |
 
 > Chinese wording confirmed by the Club owner on 2026-10-28 (Active member → 活跃会员, Inactive member → 非活跃会员; all other terms confirmed as listed).
+> Deletion reasons (Test record → 测试记录, Spam → 垃圾注册, Entered by mistake → 误录入) set by the Club owner on 2026-10-30.

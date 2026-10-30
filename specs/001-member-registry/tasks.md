@@ -148,28 +148,37 @@ Two ports are needed that plan.md does not name; both are thin and pure at the i
   `mei lin` finds "Mei Lin Example", `林` finds "林美", `555-0123` and `6045550123` find "(604) 555-0123"; exact
   member-number match first, then by member number ascending; at most 25 with `truncated`; empty or > 100 chars →
   `VALIDATION_FAILED`; no matches → empty list
-- [ ] T022 [P] Write failing table-driven tests in `tests/unit/permissions.test.ts` (FR-024, FR-025, SC-007; US2-AS6,
+- [X] T022 [P] Write failing table-driven tests in `tests/unit/permissions.test.ts` (FR-024, FR-025, SC-007; US2-AS6,
   US3-AS4, US4-AS6, US5-AS4, US6-AS4): every capability × each role, combined roles (treasurer+EC = union), empty roles
   = no capabilities, matching the matrix in data-model.md "Permission matrix"
-- [ ] T023 [P] Write failing tests in `tests/unit/member.test.ts` (FR-002, FR-014; US4-AS5): editable fields are
+- [X] T023 [P] Write failing tests in `tests/unit/member.test.ts` (FR-002, FR-014; US4-AS5): editable fields are
   exactly `name_en`, `name_zh`, `membership_type`, `email`, `phone`, `wechat_id`, `birthday_month`/`birthday_day`,
   `registration_event`, `note`; a change set with `memberNumber`, `registrationDate`, `privacyAckDate` or any unknown
   key is rejected; `diff(old, merged)` lists only changed fields; `birthday: null` clears it
-- [ ] T024 [P] Write failing tests in `tests/unit/history.test.ts` (FR-018; US4-AS1…AS3, US5-AS2): a creation entry
+- [X] T024 [P] Write failing tests in `tests/unit/history.test.ts` (FR-018; US4-AS1…AS3, US5-AS2): a creation entry
   carries every submitted field as `new_value` (including `privacy_ack_date`, `registration_event`); an update entry
-  lists `fields_changed` names and old/new values; the deletion plan is "purge values of member N, then append
-  `member_deleted` with values `name_en`, `name_zh` (old = name, new empty) and `reason`"; role-change values keep
-  roles; timestamps are ISO 8601 with the Halifax offset
-- [ ] T025 [P] Write failing tests in `tests/contract/schema-principles.test.ts` (FR-002, FR-006, Principle II): the
+  lists `fields_changed` names and old/new values; the deletion plan (revised 2026-10-30) is "(a) append
+  `member_deleted` with `reason_code` (`test_record` | `spam` | `entered_by_mistake`), no values and no name; (b) purge
+  every ChangeValues row of member N; (c) remove the Members row", the entry exists before any purge and no
+  ChangeValues rows remain for N afterwards; `reasonCode` is empty for every other change kind; role-change values
+  keep roles; timestamps are ISO 8601 with the Halifax offset
+- [X] T025 [P] Write failing tests in `tests/contract/schema-principles.test.ts` (FR-002, FR-006, Principle II): the
   Members columns in `src/adapters/gas/schema.ts` are exactly those in data-model.md; no column or `RegistrationInput`
-  field is named like card, bank, payment, address, or birth year; sheet order is README, Members, ClubUsers,
+  field is named like card/bank credentials or a birth year (pattern revised 2026-10-30; `payment_method` and
+  `fiscal_year` are allowed); sheet order is README, Members, ClubUsers,
   ChangeHistory, ChangeValues, Counters
 
 ### Implementation (domain)
 
 - [ ] T026 Copy `specs/001-member-registry/contracts/api-types.ts` to `src/server/api-types.ts` (unchanged, the
   single source of request/response types for server and client) and create `src/domain/errors.ts` (`DomainError`
-  carrying an `ErrorCode` and optional `FieldError[]`)
+  carrying an `ErrorCode` and optional `FieldError[]`). Then point the RegistrationInput test in
+  `tests/contract/schema-principles.test.ts` (`registrationInputFields()`) at `src/server/api-types.ts` (the shipped
+  code) instead of the contract copy; keep the parser guard (`email`, `phone`, `privacyAcknowledged` found). Also
+  repoint every `import type … from '…/specs/001-member-registry/contracts/api-types'` to `src/server/api-types.ts`:
+  stubs `src/domain/{birthday,validation,duplicates,search,permissions,member,history}.ts` and
+  `src/adapters/gas/schema.ts`, and tests `tests/unit/{permissions,member}.test.ts`; afterwards
+  `grep -r "contracts/api-types" src tests` finds nothing and `npm run typecheck` passes
 - [ ] T027 [P] Implement `src/domain/normalize.ts` to make T017 pass
 - [ ] T028 [P] Implement `src/domain/birthday.ts` to make T018 pass
 - [ ] T029 Implement `src/domain/validation.ts` to make T019 pass (uses normalize and birthday)
@@ -408,7 +417,8 @@ records through the audited deletion (FR-016, research R3) rather than by editin
 
 **Independent Test**: as an Admin on memory adapters, add a Club user and change their roles; the next call by that
 user has exactly the new permissions; the last Admin cannot be removed; a deleted record disappears from search and
-count, leaving only the deletion entry's number, name and reason; EC members and treasurers are refused.
+count, leaving only the deletion entry's member number, who, when and reason code; EC members and treasurers are
+refused.
 
 ### Tests ⚠️ write first, see them fail
 
@@ -423,11 +433,13 @@ count, leaving only the deletion entry's number, name and reason; EC members and
 - [ ] T074 [P] [US5] Add failing rows for `listClubUsers`, `addClubUser`, `setClubUserRoles` to
   `tests/contract/role-matrix.test.ts` (FR-025, US5-AS4)
 - [ ] T126 [P] [US5] Write failing tests in `tests/application/deleteMember.test.ts` (FR-016, FR-017, FR-018, SC-006):
-  **US5-AS1** missing reason → `reason_required` (reason 1…200 chars), `confirmed = false` → `confirmation_required`,
-  nothing deleted; **US5-AS2** after deletion the record is absent from search and `countMembers` drops by one; every
-  earlier ChangeHistory row is unchanged; ChangeValues for that member hold only the deletion entry's `name_en`,
-  `name_zh`, `reason`; the deletion entry is readable through `HistoryRepository` by member number (SC-006); a scan of
-  every memory repository and the Cache finds none of the member's email, phone, WeChat ID, birthday or Note;
+  **US5-AS1** missing `reasonCode` or one that is not `test_record` | `spam` | `entered_by_mistake` →
+  `reason_required`, `confirmed = false` → `confirmation_required`, nothing deleted; **US5-AS2** after deletion the
+  record is absent from search and `countMembers` drops by one; every earlier ChangeHistory row is unchanged; no
+  ChangeValues rows remain for that member; the `member_deleted` entry (with `reason_code`, no name) is readable
+  through `HistoryRepository` by member number (SC-006); a scan of every memory repository and the Cache finds none
+  of the member's names, email, phone, WeChat ID, birthday or Note; a failure after the entry is appended →
+  `SAVE_FAILED`, and retrying the same call completes the deletion without a second entry (research R3, 2026-10-30);
   **US5-AS4** EC member and treasurer → `FORBIDDEN`; `MemberReferences.hasDependents = true` →
   `HAS_DEPENDENT_RECORDS`; stale version → `VERSION_CONFLICT`; the member number is not reused and the freed email
   and phone can register again (edge case "deleted records"); failure → snapshot restored, `SAVE_FAILED`
@@ -569,7 +581,8 @@ and Club-user management.
 ### Deletion UI (US5)
 
 - [ ] T128 [P] [US5] Write failing Playwright tests in `tests/ui/delete.spec.ts` (desktop 1280 px plus a phone smoke
-  test): **US5-AS1** Delete on the member view asks for a reason and a confirmation before deleting; **US5-AS2** the
+  test): **US5-AS1** Delete on the member view asks to choose one of the three reasons (`reason.*` keys; no free text) and
+  for a confirmation before deleting; **US5-AS2** the
   deleted record is gone from search and the count drops; **US5-AS4** EC member and treasurer see no Delete
 - [ ] T131 [US5] Implement `src/ui/client/deleteMember.ts` (Delete action on the member view from T094) with
   `delete.*` keys, to make T128 pass

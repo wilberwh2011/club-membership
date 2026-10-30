@@ -249,11 +249,16 @@ Two projects: rejected (two deployables, duplicated code).
 
 ## R3. Append-only change history with deletion redaction
 
+> **Revised 2026-10-30 (owner decision)**: the deletion entry is a ChangeHistory row only (member number, actor,
+> time, and a fixed `reason_code`: `test_record` | `spam` | `entered_by_mistake`); it has no ChangeValues rows and
+> keeps no member name. The order is now append → purge → remove, each step safe to retry. The text below reflects
+> the revision.
+
 **Decision**: Split the change history into two sheets.
 
 - **ChangeHistory** (the audit fact): `entry_id`, `recorded_at`, `actor_kind`, `actor_user_id`,
-  `change_kind`, `subject_kind`, `subject_id`, `fields_changed` (field *names* only), `request_id`.
-  Holds no personal values of members. Rows are only ever **appended**; the repository port for this
+  `change_kind`, `subject_kind`, `subject_id`, `fields_changed` (field *names* only), `request_id`,
+  `reason_code` (deletions only; a fixed code, never free text). Holds no personal values of members. Rows are only ever **appended**; the repository port for this
   sheet exposes `append()` and read methods and **no update or delete method**.
 - **ChangeValues** (the personal values): `entry_id`, `member_number`, `field`, `old_value`, `new_value`.
   One row per changed field per entry. The repository port exposes `append()`, reads, and exactly one
@@ -261,13 +266,19 @@ Two projects: rejected (two deployables, duplicated code).
 
 Deleting member *N* (FR-016/FR-018), inside one script lock:
 
-1. Check permission (Admin), confirmation, non-empty reason, version, and that no dependent records exist
-   (FR-017; the check returns "none" in this feature and is implemented by later features).
-2. Remove member row *N* from **Members**.
-3. `purgeMemberValues(N)`: delete every **ChangeValues** row with `member_number = N`.
-4. Append the deletion entry to **ChangeHistory** (`change_kind = member_deleted`) and its values to
-   **ChangeValues**: `name_en`, `name_zh` (old value = name, new value empty) and `reason`. These are
-   written *after* the purge, so they survive.
+1. Check permission (Admin), confirmation, a reason code that is one of `test_record`, `spam`,
+   `entered_by_mistake`, version, and that no dependent records exist (FR-017; the check returns "none" in this
+   feature and is implemented by later features).
+2. (a) Append the deletion entry to **ChangeHistory** (`change_kind = member_deleted`, `subject_id = N`, actor,
+   `recorded_at`, `reason_code`). It has **no** ChangeValues rows and holds no member name.
+3. (b) `purgeMemberValues(N)`: delete **every** ChangeValues row with `member_number = N`.
+4. (c) Remove member row *N* from **Members**.
+
+The audit fact is written first, so a deletion never happens without its entry (FR-018: if the history entry cannot
+be saved, nothing changes). Each step is safe to retry, and an interrupted deletion is completed by retrying it:
+(a) is skipped when a `member_deleted` entry for *N* already exists (member numbers are never reused), (b) removes
+nothing when no rows are left, and (c) does nothing when the row is already gone. No snapshot or rollback is needed:
+if (a) fails nothing has changed; if (b) or (c) fails, the deletion entry already exists and a retry finishes the job.
 
 Every earlier **ChangeHistory** row for *N* stays unchanged: who, when, kind of change, and *which fields*
 changed remain; only the values are gone (exactly what FR-018 requires). Role-change entries keep their
@@ -283,7 +294,8 @@ values (roles are not member personal data).
   Principle IV's strict scope (payments, membership status) is not touched: a member with payments cannot be
   deleted (FR-017), and membership status does not exist yet.
 - *Principle I* (personal data only where needed): after deletion the register holds no personal details of
-  the person except the member number and name in the deletion entry (FR-016, SC-006).
+  the person except the member number in the deletion entry (FR-016, SC-006). The reason is a fixed code, so the
+  never-purged ChangeHistory sheet cannot collect free-text personal details.
 - The residual tension (personal values are removed from an "append-only" store) is recorded in the plan's
   Complexity Tracking table.
 

@@ -79,7 +79,7 @@ plus a private window that is not signed in.
 | 5 | Treasurer: search, open record, look for edit/register/delete/users | Can view all fields and history; no edit/register/delete/users (US2 AS6, US3 AS4) |
 | 6 | EC member: register on behalf, edit phone and Note | History shows EC member, old/new values (US3, US4) |
 | 7 | Two browsers edit the same record | Second save gets "record changed, review" (FR-019) |
-| 8 | Admin: delete a test record with reason | Gone from search and count; deletion entry shows only number, name, reason (US5) |
+| 8 | Admin: delete a test record, choosing the reason "Test record" | Gone from search and count; the ChangeHistory row shows only member number, who, when, `reason_code` = `test_record`; no ChangeValues rows for that member (US5) |
 | 9 | Admin: try removing own Admin role while sole Admin | Refused (FR-015) |
 | 10 | Search at 2,000+ synthetic records on a phone | Result in < 10 s from first character (SC-001) |
 | 11 | Open the sign-in link inside WeChat | Message asks to open in a browser (research R1-2) |
@@ -164,7 +164,7 @@ the previous version.
 ## Other everyday answers
 
 - **"How many members do we have?"** → app → Search screen shows the member count.
-- **A spam or test registration?** → app → open the record → **Delete** → give a reason (e.g., "spam") → confirm.
+- **A spam or test registration?** → app → open the record → **Delete** → choose the reason (Test record, Spam, or Entered by mistake) → confirm.
   Deleting cannot be undone in the app and keeps only the member number and name in the change history.
 - **Someone can't sign in from WeChat** → ask them to open the link in Chrome or Safari.
 - **Changing the app's code** → only a developer does this, with you signing in to the Club account for the deploy

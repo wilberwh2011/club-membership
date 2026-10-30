@@ -17,3 +17,6 @@ Auto? = could a script, lint rule, reviewer agent, or CI gate have caught this? 
 | 2026-10-22 | — | [process] | Edited brief on wrong branch (not merged with main) | Check branch before edits | yes: pre-edit hook showing branch |
 | 2026-10-29 | T017–T021 | [privacy] | Checked tests use only example.org / 555-01xx | OK | yes: check:fixtures already does this |
 | 2026-10-29 | T017–T025 | [test] | "Missing module" red proves nothing; added throwing stubs so each assertion fails individually | Changed 2a prompt | yes: CI check "no test passes against stubs" |
+| 2026-10-29 | T017–T021 | [test] | null phone/email keys could falsely match (null === null) — no test | Added FR-012 null-key test | maybe: reviewer-agent checklist "null/empty inputs" |
+| 2026-10-29 | T017–T021 | [ci] | CI red by design (tests before implementation) | Expected until 2b | — |
+| 2026-10-30 | T022–T025 | [rule] | Deletion design: reason as fixed code in ChangeHistory; delete only for test/spam/mistake; no name kept; audit entry before purge | Spec FR-016/018, data model, tests updated | maybe: reviewer checks "audit write before destructive step" |

@@ -67,7 +67,8 @@ Editable via the app (`updateMember`): `name_en`, `name_zh`, `membership_type`, 
 
 Protection: whole sheet (warning). Columns `email_key`…`phone_key` are grouped (collapsed) to keep the view tidy.
 
-Lifecycle: `created` (registration) → `updated` (0..n edits) → `deleted` (row removed, deletion entry kept).
+Lifecycle: `created` (registration) → `updated` (0..n edits) → `deleted` (row removed; deletion entry with member number and
+reason code kept).
 There is no status column; active / inactive is derived by the later membership-fees feature.
 
 ---
@@ -113,8 +114,9 @@ Append-only. **The application never updates or deletes a row in this sheet.** H
 | `change_kind` | enum | `member_created` \| `member_updated` \| `member_deleted` \| `club_user_added` \| `roles_changed` |
 | `subject_kind` | enum | `member` \| `club_user` |
 | `subject_id` | text | Member number or `user_id` |
-| `fields_changed` | text | Comma-separated field names (names only; no values) |
+| `fields_changed` | text | Comma-separated field names (names only; no values); empty for `member_deleted` |
 | `request_id` | text | Client request / submission id (support for retry diagnosis) |
+| `reason_code` | enum | `member_deleted` only: `test_record` \| `spam` \| `entered_by_mistake` (FR-016; translation keys `reason.<code>`); empty for every other change kind. A fixed code, never free text, because this sheet is never purged (Principle I; owner decision 2026-10-30) |
 
 Protection: whole sheet (warning). Display in the app: entries for a member sorted by `recorded_at` descending,
 with the actor's `display_name` (from ClubUsers) or "Self-registration".
@@ -127,13 +129,15 @@ with the actor's `display_name` (from ClubUsers) or "Self-registration".
 |---|---|---|
 | `entry_id` | text | → `ChangeHistory.entry_id` |
 | `member_number` | integer | Set for member entries; empty for Club-user entries |
-| `field` | text | Field name (`email`, `roles`, `reason`, …) |
+| `field` | text | Field name (`email`, `roles`, …) |
 | `old_value` | text | Empty for creation |
 | `new_value` | text | Empty for deletion |
 
 Rows are appended with their entry. Exactly one removal path exists: `purgeMemberValues(memberNumber)`, called only
-by the `deleteMember` use case, which then appends the deletion entry's own values (`name_en`, `name_zh`,
-`reason`) — see research R3. Creation entries store every submitted field as `new_value` (including
+by the `deleteMember` use case; it removes **every** ChangeValues row of that member. The `member_deleted` entry has
+**no** ChangeValues rows and keeps no member name (owner decision 2026-10-30). Deletion order (research R3): (a) append
+the `member_deleted` ChangeHistory row; (b) `purgeMemberValues(N)`; (c) remove the Members row; each step is safe to
+retry. Creation entries store every submitted field as `new_value` (including
 `privacy_ack_date` and `registration_event`).
 
 Protection: whole sheet (warning).
@@ -143,8 +147,8 @@ Protection: whole sheet (warning).
 | Sheet | Before | After |
 |---|---|---|
 | Members | row 1042 | — (removed) |
-| ChangeHistory | H…01 created, H…07 updated (`phone`) | H…01, H…07 unchanged + H…12 `member_deleted` |
-| ChangeValues | values for H…01, H…07 | only H…12: `name_en` = "Test Person", `name_zh` = "", `reason` = "test record" |
+| ChangeHistory | H…01 created, H…07 updated (`phone`) | H…01, H…07 unchanged + H…12 `member_deleted` (`subject_id` = 1042, actor, `recorded_at`, `reason_code` = `test_record`), appended first |
+| ChangeValues | values for H…01, H…07 | — (none for member 1042; H…12 has no values) |
 
 ---
 
@@ -190,7 +194,8 @@ MemberInput    = { nameEn?, nameZh?, membershipType, email, phone, wechatId?, bi
 Member         = MemberInput + { memberNumber, registrationDate, privacyAckDate, note, createdAt, updatedAt, version }
 MemberSummary  = { memberNumber, nameEn, nameZh, membershipType, email, phone }
 ClubUser       = { userId, email, googleSub?, displayName, roles: Role[], language, version }
-HistoryEntry   = { entryId, recordedAt, actor, changeKind, subject, fieldsChanged[], values?: {field, old, new}[] }
+HistoryEntry   = { entryId, recordedAt, actor, changeKind, subject, fieldsChanged[], reasonCode, values?: {field, old, new}[] }
+DeletionReasonCode = 'test_record' | 'spam' | 'entered_by_mistake'   // reasonCode is set only for member_deleted
 Capability     = 'member.search' | 'member.viewContact' | 'member.viewDetails' | 'member.register'
                | 'member.edit' | 'member.delete' | 'clubUser.manage'
 ```

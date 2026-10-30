@@ -1,4 +1,7 @@
 {
+  "reason.entered_by_mistake": "Entered by mistake",
+  "reason.spam": "Spam",
+  "reason.test_record": "Test record",
   "term.admin": "Admin",
   "term.changeHistory": "Change history",
   "term.clubRole": "Club role",

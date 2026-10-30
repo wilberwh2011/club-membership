@@ -4,6 +4,8 @@
 export type Language = 'en' | 'zh-Hans';
 export type Role = 'admin' | 'ec_member' | 'treasurer';
 export type MembershipType = 'individual' | 'family';
+/** The only reasons a member record may be deleted for (FR-016); stored as ChangeHistory.reason_code. */
+export type DeletionReasonCode = 'test_record' | 'spam' | 'entered_by_mistake';
 
 export type Capability =
   | 'member.search'
@@ -189,7 +191,7 @@ export interface ServerApi {
     sessionToken: string,
     memberNumber: number,
     expectedVersion: number,
-    reason: string,
+    reasonCode: DeletionReasonCode,
     confirmed: boolean,
   ): Result<null>;
   // club users

@@ -1,4 +1,7 @@
 {
+  "reason.entered_by_mistake": "误录入",
+  "reason.spam": "垃圾注册",
+  "reason.test_record": "测试记录",
   "term.admin": "管理员",
   "term.changeHistory": "变更记录",
   "term.clubRole": "俱乐部角色",
