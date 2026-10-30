@@ -1,0 +1,19 @@
+{
+  "reason.entered_by_mistake": "Entered by mistake",
+  "reason.spam": "Spam",
+  "reason.test_record": "Test record",
+  "term.admin": "Admin",
+  "term.changeHistory": "Change history",
+  "term.clubRole": "Club role",
+  "term.clubUser": "Club user",
+  "term.delete": "Delete",
+  "term.duplicateRegistrationAttempt": "Duplicate registration attempt",
+  "term.ecMember": "EC member",
+  "term.familyMembership": "Family membership",
+  "term.individualMembership": "Individual membership",
+  "term.member": "Member",
+  "term.memberNumber": "Member number",
+  "term.note": "Note",
+  "term.registrationEvent": "Registration event",
+  "term.treasurer": "Treasurer"
+}

@@ -1,0 +1,19 @@
+{
+  "reason.entered_by_mistake": "误录入",
+  "reason.spam": "垃圾注册",
+  "reason.test_record": "测试记录",
+  "term.admin": "管理员",
+  "term.changeHistory": "变更记录",
+  "term.clubRole": "俱乐部角色",
+  "term.clubUser": "俱乐部用户",
+  "term.delete": "删除",
+  "term.duplicateRegistrationAttempt": "重复注册",
+  "term.ecMember": "理事",
+  "term.familyMembership": "家庭会员",
+  "term.individualMembership": "个人会员",
+  "term.member": "会员",
+  "term.memberNumber": "会员编号",
+  "term.note": "备注",
+  "term.registrationEvent": "注册活动名称",
+  "term.treasurer": "会计"
+}
